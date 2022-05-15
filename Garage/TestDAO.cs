@@ -15,7 +15,7 @@ namespace Garage.ConsoleApp
             foreach (Car car in cars)
             {
                 // display movie
-                string displayCar = String.Format("Title : {0}, date : {1}", car.name, car.year.ToString());
+                string displayCar = String.Format("Nom : {0}, Date : {1}", car.name, car.year.ToString());
                 Console.WriteLine(displayCar);
 
                 /*
