@@ -15,7 +15,7 @@ namespace Garage.DAO.Context
 
         public virtual DbSet<Brand> Brands { get; set; }
         public virtual DbSet<Car> Cars { get; set; }
-        //public virtual DbSet<Garage> Garages { get; set; }
+        public virtual DbSet<Model.Garage> Garages { get; set; }
         public virtual DbSet<Repair> Repairs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

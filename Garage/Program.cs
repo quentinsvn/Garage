@@ -21,7 +21,7 @@ namespace Garage.ConsoleApp
 
             while (!allDone)
             {
-                Console.WriteLine("Que voulez-vois faire ?");
+                Console.WriteLine("Que voulez-vous faire ?");
                 Console.WriteLine("1. Afficher les marques de voitures");
                 Console.WriteLine("2. Afficher les voitures d'une marque");
                 Console.WriteLine("3. Afficher le classement des marques les plus fiables");
@@ -39,19 +39,22 @@ namespace Garage.ConsoleApp
                 switch (choice)
                 {
                     case 1:
-                        testDAO.DisplayAllMoviesOrdered();
+                        testDAO.DisplayAllBrandOrdered();
                         break;
                     case 2:
-                        testDAO.DisplayAllMoviesOrdered();
+                        // Demander la marque
+                        Console.Write("Numéro de marque : ");
+                        int brand = int.Parse(Console.ReadLine());
+                        testDAO.DisplayAllCarsFromBrand(brand);
                         break;
                     case 3:
-                        testDAO.DisplayAllMoviesOrdered();
+                        testDAO.DisplayAllCarsOrdered();
                         break;
                     case 4:
-                        testDAO.DisplayAllMoviesOrdered();
+                        testDAO.DisplayAllGaragesOrdered();
                         break;
                     case 5:
-                        testDAO.DisplayAllMoviesOrdered();
+                        testDAO.DisplayAllCarsOrdered();
                         break;
                     case 6:
                         Console.WriteLine("Au revoir !");
