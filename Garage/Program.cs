@@ -48,13 +48,13 @@ namespace Garage.ConsoleApp
                         testDAO.DisplayAllCarsFromBrand(brand);
                         break;
                     case 3:
-                        testDAO.DisplayAllCarsOrdered();
+                        testDAO.DisplayRepairOrdered();
                         break;
                     case 4:
                         testDAO.DisplayAllGaragesOrdered();
                         break;
                     case 5:
-                        testDAO.DisplayAllCarsOrdered();
+                        testDAO.DisplayRepairOrdered();
                         break;
                     case 6:
                         Console.WriteLine("Au revoir !");

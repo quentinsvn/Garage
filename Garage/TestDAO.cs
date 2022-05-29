@@ -117,6 +117,56 @@ namespace Garage.ConsoleApp
             Console.WriteLine(); // Saut de ligne
         }
 
+        // Affichage des réparations
+        private void DisplayRepair(List<Repair> repairs)
+        {
+            // Header du tableau
+            string l1 = "+----------------------------------------+";
+            string l2 = "| Repairs number  | Nom                  |";
+            string l3 = "+----------------------------------------+";
+
+            Console.WriteLine(l1); // affichage de la ligne 1
+            Console.WriteLine(l2); // affichage de la ligne 2
+            Console.WriteLine(l3); // affichage de la ligne 3
+
+            // affichage des réparations
+            foreach (Repair repair in repairs)
+            {
+
+                // ID de la voiture
+                int displayCarId = repair.carId;
+
+                // Nom de la voiture
+                using (GarageContext context = new GarageContext())
+                {
+                    Car car = context.Cars.Find(displayCarId); // Recherche de la voiture par son id
+
+                    // Count the number of car repairs taking into account cars without any repairs
+                    int carRepairCount = context.Repairs.Where(r => r.carId == car.id).Count();
+
+                    // Nom des marques
+                    Brand brand = context.Brands.Find(car.brandId);
+                    
+                    string displayBrandName = String.Format("{0}", brand.name);
+
+                    // Nom des marques de voitures par rapport à l'id de la voiture
+                    string displayCarName = String.Format("{0}", displayBrandName);
+                    
+
+
+                    string displayRepair = String.Format("| {0,-15} | {1,-20} |", carRepairCount, displayCarName); // affichage de la donnée
+                    Console.WriteLine(displayRepair);
+                }
+
+                // Affichage de la réparation
+                //Console.WriteLine(displayRepair);
+            }
+
+            Console.WriteLine(l1); // Fin de la liste
+            Console.WriteLine(); // Saut de ligne
+        }
+        
+
         // Liste des marques de voitures triées par ordre alphabétique
         public void DisplayAllBrandOrdered()
         {
@@ -150,7 +200,7 @@ namespace Garage.ConsoleApp
 
             using (GarageContext context = new GarageContext())
             {
-                list = context.Garages.OrderBy(m => m.id).ToList();
+                list = context.Garages.OrderBy(m => m.name).ToList();
             }
             DisplayGarage(list);
         }
@@ -173,63 +223,16 @@ namespace Garage.ConsoleApp
 
         }
 
-        public void DisplayBrandMoreSafe()
+        // Afficher le classement des réparations
+        public void DisplayRepairOrdered()
         {
-            List<Brand> list;
+            List<Repair> list;
 
             using (GarageContext context = new GarageContext())
             {
-                /*
-                list = (from movie in context.Movies
-                        orderby movie.Title ascending
-                        where movie.Date < date
-                        select movie).ToList();
-                */
-
-                //display the all brand
-                //list = context.Brands.OrderBy(m => m.id).ToList();
-                // display the brand ordered with minimum row un repear.cs table
-                list = context.Brands
-                    .GroupBy(m => m.name)
-                    .Select(m => m.First())
-                    .OrderBy(m => m.id).ToList();
-
-
-                Console.WriteLine("******************** TEST DAO - DisplayMoviesBeforeYear **************");
-
+                list = context.Repairs.OrderBy(m => m.id).ToList();
             }
-            DisplayBrand(list);
-        }
-
-        public void DisplayAllGarage()
-        {
-            List<Car> list;
-
-            using (GarageContext context = new GarageContext())
-            {
-                /*
-                list = (from movie in context.Movies
-                        from genre in movie.Genres
-                        where genre.Name == genreName
-                        orderby movie.Title ascending
-                        select movie).ToList();
-                
-                list = context.Movies
-                    .Where(m => m.Genres
-                        .Any(g ==> g.Name == genreName))
-                    .OrderBy(movie => movie.Title)
-                */
-                // display all garages
-                list = context.Cars.ToList();
-
-
-
-
-
-                Console.WriteLine("******************** TEST DAO - DisplayAllGarage **************");
-
-            }
-            DisplayCar(list);
+            DisplayRepair(list);
         }
 
     }
