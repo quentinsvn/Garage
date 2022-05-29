@@ -11,7 +11,6 @@ namespace Garage.ConsoleApp
         static void Main(string[] args)
         {
             TestDAO testDAO = new TestDAO();
-            //stDAO.DisplayAllMoviesOrdered();
 
             // Menu
 
@@ -33,7 +32,7 @@ namespace Garage.ConsoleApp
                 int choice;
                 while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > 6)
                 {
-                    Console.WriteLine("Valeur alphanumérique incorrecte. Entrer un nombre entre 1 et 6: ");
+                    Console.Write("Valeur alphanumérique incorrecte. Entrer un nombre entre 1 et 6: ");
                 }
 
                 switch (choice)
@@ -48,13 +47,15 @@ namespace Garage.ConsoleApp
                         testDAO.DisplayAllCarsFromBrand(brand);
                         break;
                     case 3:
-                        testDAO.DisplayRepairOrdered();
+                        testDAO.DisplayBrandMoreSafeOrdered();
                         break;
                     case 4:
                         testDAO.DisplayAllGaragesOrdered();
                         break;
                     case 5:
-                        testDAO.DisplayRepairOrdered();
+                        Console.Write("Numéro de garage : ");
+                        int garage = int.Parse(Console.ReadLine());
+                        testDAO.DisplayRepairBrandByGarage(garage);
                         break;
                     case 6:
                         Console.WriteLine("Au revoir !");

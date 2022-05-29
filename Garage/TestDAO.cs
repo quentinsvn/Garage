@@ -3,8 +3,6 @@ using Garage.DAO.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Garage.ConsoleApp
 {
@@ -15,50 +13,55 @@ namespace Garage.ConsoleApp
         private void DisplayCar(List<Car> cars)
         {
 
-            Console.WriteLine("+--------------------------------+");
-
-            // Affichage du nom de la marque de voiture
-            for (int i = 1; i <= 1; i++)
+            if (cars.Count > 0)
             {
-                using (GarageContext context = new GarageContext())
+                Console.WriteLine("+--------------------------------+");
+
+                // Affichage du nom de la marque de voiture
+                for (int i = 1; i <= 1; i++)
                 {
-                    Brand brand = context.Brands.Find(cars[i].brandId); // Recherche de la marque de voiture par son id
+                    using (GarageContext context = new GarageContext())
+                    {
+                        Brand brand = context.Brands.Find(cars[i].brandId); // Recherche de la marque de voiture par son id
 
-                    string displayBrandName = String.Format("| {0,-30} |", brand.name);
+                        string displayBrandName = String.Format("| {0,-30} |", brand.name);
 
-                    Console.WriteLine(displayBrandName); // Affichage du nom de la marque de voiture
+                        Console.WriteLine(displayBrandName); // Affichage du nom de la marque de voiture
+
+                    }
+                }
+
+                // Header du tableau
+                string l1 = "+-----+------------------+-------+";
+                string l2 = "| Id  | Nom              | Année |";
+                string l3 = "+-----+------------------+-------+";
+
+
+                Console.WriteLine(l1); // affichage de la ligne 1
+                Console.WriteLine(l2); // affichage de la ligne 2
+                Console.WriteLine(l3); // affichage de la ligne 3
+
+                foreach (Car car in cars)
+                {
+
+                    // display car
+                    int displayCarId = car.id;
+                    string displayCarName = String.Format("{0}", car.name);     // Nom de la voiture
+                    string displayCarYear = String.Format("{0}", car.year.ToString());     // Année de la voiture
+
+                    // affichage de la ligne with padding
+                    string displayCar = String.Format("| {0,-3} | {1,-16} | {2,-5} |", displayCarId, displayCarName, displayCarYear);
+
+                    Console.WriteLine(displayCar);
 
                 }
+
+                Console.WriteLine(l1 + "\n"); // Fin de ligne
             }
-
-            // Header du tableau
-            string l1 = "+-----+------------------+-------+";
-            string l2 = "| Id  | Nom              | Année |";
-            string l3 = "+-----+------------------+-------+";
-          
-
-            Console.WriteLine(l1); // affichage de la ligne 1
-            Console.WriteLine(l2); // affichage de la ligne 2
-            Console.WriteLine(l3); // affichage de la ligne 3
-
-            foreach (Car car in cars)
+            else
             {
-
-                // display car
-                int displayCarId = car.id;
-                string displayCarName = String.Format("{0}", car.name);     // Nom de la voiture
-                string displayCarYear = String.Format("{0}", car.year.ToString());     // Année de la voiture
-
-                // affichage de la ligne with padding
-                string displayCar = String.Format("| {0,-3} | {1,-16} | {2,-5} |", displayCarId, displayCarName, displayCarYear);
-
-                Console.WriteLine(displayCar);
-
+                Console.WriteLine("Erreur : Aucune voiture n'a été trouvée !\n");
             }
-
-            Console.WriteLine(l1); // affichage de la ligne 1
-
-            Console.WriteLine(); // Saut de ligne
         }
 
         // Affichage des marques des voitures
@@ -85,8 +88,7 @@ namespace Garage.ConsoleApp
                 Console.WriteLine(displayBrand);
             }
 
-            Console.WriteLine(l1); // Fin de la liste
-            Console.WriteLine(); // Saut de ligne
+            Console.WriteLine(l1 + "\n"); // Fin de la liste
         }
 
         // Affichage des garages
@@ -113,8 +115,7 @@ namespace Garage.ConsoleApp
                 Console.WriteLine(displayGarage);
             }
 
-            Console.WriteLine(l1); // Fin de la liste
-            Console.WriteLine(); // Saut de ligne
+            Console.WriteLine(l1 + "\n"); // Fin de la liste
         }
 
         // Affichage des réparations
@@ -130,40 +131,30 @@ namespace Garage.ConsoleApp
             Console.WriteLine(l3); // affichage de la ligne 3
 
             // affichage des réparations
-            foreach (Repair repair in repairs)
+            List<Brand> list;
+            using (GarageContext context = new GarageContext())
             {
+                // liste des marques
+                list = context.Brands.ToList();
 
-                // ID de la voiture
-                int displayCarId = repair.carId;
-
-                // Nom de la voiture
-                using (GarageContext context = new GarageContext())
+                foreach (var brand in list)
                 {
-                    Car car = context.Cars.Find(displayCarId); // Recherche de la voiture par son id
+                    int count = 0;
+                    foreach (var car in context.Cars.Where(m => m.brandId == brand.id))
+                    {
+                        Repair repair = context.Repairs.Find(car.id);
 
-                    // Count the number of car repairs taking into account cars without any repairs
-                    int carRepairCount = context.Repairs.Where(r => r.carId == car.id).Count();
+                        count += context.Repairs.Where(m => m.carId == car.id).Count();
 
-                    // Nom des marques
-                    Brand brand = context.Brands.Find(car.brandId);
-                    
-                    string displayBrandName = String.Format("{0}", brand.name);
+                    }
 
-                    // Nom des marques de voitures par rapport à l'id de la voiture
-                    string displayCarName = String.Format("{0}", displayBrandName);
-                    
+                    string displayNumberOfRepair = String.Format("| {0,-15} | {1,-20} |", count, brand.name);
 
-
-                    string displayRepair = String.Format("| {0,-15} | {1,-20} |", carRepairCount, displayCarName); // affichage de la donnée
-                    Console.WriteLine(displayRepair);
+                    Console.WriteLine(displayNumberOfRepair);
                 }
-
-                // Affichage de la réparation
-                //Console.WriteLine(displayRepair);
             }
 
-            Console.WriteLine(l1); // Fin de la liste
-            Console.WriteLine(); // Saut de ligne
+            Console.WriteLine(l1 + "\n"); // Fin de la liste
         }
         
 
@@ -179,18 +170,31 @@ namespace Garage.ConsoleApp
             DisplayBrand(list);
         }
 
-        // Liste des voitures triées par ordre alphabétique
-        public void DisplayAllCarsOrdered()
+        // Liste des voitures d'une marque par rapport à son ID
+        public void DisplayAllCarsFromBrand(int brand)
         {
-
             List<Car> list;
+
 
             using (GarageContext context = new GarageContext())
             {
-                list = context.Cars.OrderBy(m => m.id).ToList();
+                list = context.Cars.Where(m => m.Brand.id == brand).OrderBy(m => m.name).ToList();
+
             }
             DisplayCar(list);
 
+        }
+
+        // Classement des marques les plus fiables (selon le nombre de réparations)
+        public void DisplayBrandMoreSafeOrdered()
+        {
+            List<Repair> list;
+
+            using (GarageContext context = new GarageContext())
+            {
+                list = context.Repairs.OrderBy(m => m.id).ToList();
+            }
+            DisplayRepair(list);
         }
 
         // Liste des garages triées par ordre alphabétique
@@ -205,34 +209,41 @@ namespace Garage.ConsoleApp
             DisplayGarage(list);
         }
 
-        // Liste des voitures d'une marque par rapport à son ID
-        public void DisplayAllCarsFromBrand(int brand)
+        // Marques réparées par un garage (selon son id)
+        public void DisplayRepairBrandByGarage(int garageId)
         {
-            List<Car> list;
-
-
             using (GarageContext context = new GarageContext())
             {
-                //foreach car get garage id and name
-                list = context.Cars.Where(m => m.Brand.id == brand).OrderBy(m => m.name).ToList();
+                DAO.Model.Garage garage = context.Garages.Find(garageId); // recherche du garage
 
-                //Console.WriteLine("******************** TEST DAO - DisplayAllCarsFromBrand **************");
+                // Vérification de l'existence du garage
+                if (garage != null)
+                {
 
+                    // Nom de la marque
+                    Console.WriteLine($"+--------------------------------------+");
+
+
+                    var list = context.Repairs.Where(m => m.garageId == garageId).GroupBy(m => m.Car.brandId).ToList();
+
+                    // Header du tableau
+                    Console.WriteLine("| Id  | Nom                            |");
+                    Console.WriteLine("+-----+--------------------------------+");
+
+                    // Affichage des marques
+                    foreach (var repair in list)
+                    {
+                        Brand brand = context.Brands.Find(repair.Key);
+                        Console.WriteLine($"| {repair.Key,-4}| {brand.name,-31}|");
+                    }
+                    Console.WriteLine($"+--------------------------------------+");
+                }
+                else
+                {
+                    // Message d'erreur si le garage n'existe pas
+                    Console.WriteLine("Erreur : Le garage n'existe pas !\n");
+                }
             }
-            DisplayCar(list);
-
-        }
-
-        // Afficher le classement des réparations
-        public void DisplayRepairOrdered()
-        {
-            List<Repair> list;
-
-            using (GarageContext context = new GarageContext())
-            {
-                list = context.Repairs.OrderBy(m => m.id).ToList();
-            }
-            DisplayRepair(list);
         }
 
     }
