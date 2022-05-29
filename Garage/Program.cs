@@ -16,9 +16,9 @@ namespace Garage.ConsoleApp
 
             Console.Title = "Garage";
 
-            bool allDone = false;
+            bool bOk = false;
 
-            while (!allDone)
+            while (!bOk)
             {
                 Console.WriteLine("Que voulez-vous faire ?");
                 Console.WriteLine("1. Afficher les marques de voitures");
@@ -29,13 +29,13 @@ namespace Garage.ConsoleApp
                 Console.WriteLine("6. Quitter");
                 Console.Write("Votre choix : ");
 
-                int choice;
-                while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > 6)
+                int choix;
+                while (!int.TryParse(Console.ReadLine(), out choix) || choix < 1 || choix > 6)
                 {
                     Console.Write("Valeur alphanumérique incorrecte. Entrer un nombre entre 1 et 6: ");
                 }
 
-                switch (choice)
+                switch (choix)
                 {
                     case 1:
                         testDAO.DisplayAllBrandOrdered();
@@ -59,7 +59,7 @@ namespace Garage.ConsoleApp
                         break;
                     case 6:
                         Console.WriteLine("Au revoir !");
-                        allDone = true;
+                        bOk = true;
                         break;
                 }
             }

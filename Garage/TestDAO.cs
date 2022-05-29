@@ -145,9 +145,8 @@ namespace Garage.ConsoleApp
                         Repair repair = context.Repairs.Find(car.id);
 
                         count += context.Repairs.Where(m => m.carId == car.id).Count();
-
                     }
-
+                    
                     string displayNumberOfRepair = String.Format("| {0,-15} | {1,-20} |", count, brand.name);
 
                     Console.WriteLine(displayNumberOfRepair);
@@ -158,7 +157,7 @@ namespace Garage.ConsoleApp
         }
         
 
-        // Liste des marques de voitures triées par ordre alphabétique
+        // Liste des marques de voitures triées par ordre d'id
         public void DisplayAllBrandOrdered()
         {
             List<Brand> list;
@@ -170,7 +169,7 @@ namespace Garage.ConsoleApp
             DisplayBrand(list);
         }
 
-        // Liste des voitures d'une marque par rapport à son ID
+        // Liste des voitures d'une marque par rapport à son ID (par ordre alphabétique)
         public void DisplayAllCarsFromBrand(int brand)
         {
             List<Car> list;
@@ -245,6 +244,5 @@ namespace Garage.ConsoleApp
                 }
             }
         }
-
     }
 }
