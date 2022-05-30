@@ -60,7 +60,9 @@ namespace Garage.ConsoleApp
             }
             else
             {
-                Console.WriteLine("Erreur : Aucune voiture n'a été trouvée !\n");
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("\nErreur : Aucune voiture n'a été trouvée !\n");
+                Console.ResetColor();
             }
         }
 
@@ -132,6 +134,9 @@ namespace Garage.ConsoleApp
 
             // affichage des réparations
             List<Brand> list;
+
+            Dictionary<int, int> idMarqueIdReparation = new Dictionary<int, int>();
+            
             using (GarageContext context = new GarageContext())
             {
                 // liste des marques
@@ -145,12 +150,25 @@ namespace Garage.ConsoleApp
                         Repair repair = context.Repairs.Find(car.id);
 
                         count += context.Repairs.Where(m => m.carId == car.id).Count();
+
                     }
-                    
-                    string displayNumberOfRepair = String.Format("| {0,-15} | {1,-20} |", count, brand.name);
+                    idMarqueIdReparation.Add(brand.id, count);
+                    //string displayNumberOfRepair = String.Format("| {0,-15} | {1,-20} |", count, brand.name);
+
+                    //Console.WriteLine(displayNumberOfRepair);
+                }
+
+                var sorted = from entry in idMarqueIdReparation orderby entry.Value ascending select entry;
+                foreach (var sor in sorted)
+                {
+                    // get the brand with brand id
+                    Brand brand = context.Brands.Find(sor.Key);
+
+                    string displayNumberOfRepair = String.Format("| {0,-15} | {1,-20} |", sor.Value, brand.name);
 
                     Console.WriteLine(displayNumberOfRepair);
                 }
+                
             }
 
             Console.WriteLine(l1 + "\n"); // Fin de la liste
@@ -240,7 +258,9 @@ namespace Garage.ConsoleApp
                 else
                 {
                     // Message d'erreur si le garage n'existe pas
-                    Console.WriteLine("Erreur : Le garage n'existe pas !\n");
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine("\nErreur : Le garage n'existe pas !\n");
+                    Console.ResetColor();
                 }
             }
         }
