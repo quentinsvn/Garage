@@ -135,7 +135,7 @@ namespace Garage.ConsoleApp
             // affichage des réparations
             List<Brand> list;
 
-            Dictionary<int, int> idMarqueIdReparation = new Dictionary<int, int>();
+            Dictionary<int, int> BrandIdRepair = new Dictionary<int, int>();
             
             using (GarageContext context = new GarageContext())
             {
@@ -152,13 +152,10 @@ namespace Garage.ConsoleApp
                         count += context.Repairs.Where(m => m.carId == car.id).Count();
 
                     }
-                    idMarqueIdReparation.Add(brand.id, count);
-                    //string displayNumberOfRepair = String.Format("| {0,-15} | {1,-20} |", count, brand.name);
-
-                    //Console.WriteLine(displayNumberOfRepair);
+                    BrandIdRepair.Add(brand.id, count);
                 }
 
-                var sorted = from entry in idMarqueIdReparation orderby entry.Value ascending select entry;
+                var sorted = from entry in BrandIdRepair orderby entry.Value ascending select entry;
                 foreach (var sor in sorted)
                 {
                     // get the brand with brand id

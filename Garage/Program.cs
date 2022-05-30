@@ -14,7 +14,7 @@ namespace Garage.ConsoleApp
 
             // Menu
 
-            Console.Title = "Garage";
+            Console.Title = "Garage"; // Nom de l'application
 
             bool bOk = false;
 
@@ -26,39 +26,49 @@ namespace Garage.ConsoleApp
                 Console.WriteLine("3. Afficher le classement des marques les plus fiables");
                 Console.WriteLine("4. Afficher les garages");
                 Console.WriteLine("5. Afficher les marques réparées par un garage");
-                Console.WriteLine("6. Quitter");
+                Console.WriteLine("Q. Quitter");
                 Console.Write("Votre choix : ");
 
-                int choix;
-                while (!int.TryParse(Console.ReadLine(), out choix) || choix < 1 || choix > 6)
+                char choix;
+                char[] menuChoix = { '1', '2', '3', '4', '5', 'Q' };
+
+                while (!char.TryParse(Console.ReadLine(), out choix) || !menuChoix.Contains(choix))
                 {
-                    Console.Write("Valeur alphanumérique incorrecte. Entrer un nombre entre 1 et 6: ");
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine("Valeur alphanumérique incorrecte.");
+                    Console.ResetColor();
+                    
+                    Console.Write("\nEntrer un nombre entre 1 et 5 ou Q (pour quitter): ");
                 }
+                
 
                 switch (choix)
                 {
-                    case 1:
+                    case '1':
                         testDAO.DisplayAllBrandOrdered();
                         break;
-                    case 2:
+                    case '2':
                         // Demander la marque
                         Console.Write("Numéro de marque : ");
                         int brand = int.Parse(Console.ReadLine());
                         testDAO.DisplayAllCarsFromBrand(brand);
                         break;
-                    case 3:
+                    case '3':
                         testDAO.DisplayBrandMoreSafeOrdered();
                         break;
-                    case 4:
+                    case '4':
                         testDAO.DisplayAllGaragesOrdered();
                         break;
-                    case 5:
+                    case '5':
                         Console.Write("Numéro de garage : ");
                         int garage = int.Parse(Console.ReadLine());
                         testDAO.DisplayRepairBrandByGarage(garage);
                         break;
-                    case 6:
+                    case 'Q':
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
                         Console.WriteLine("Au revoir !");
+                        Console.ResetColor();
+                        
                         bOk = true;
                         break;
                 }
